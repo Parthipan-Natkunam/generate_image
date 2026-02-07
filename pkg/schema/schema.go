@@ -40,7 +40,7 @@ func GetToolDefinition() ToolDefinition {
 					"description": "The height of the generated image.",
 					"default":     1024,
 				},
-				"aspect_ratio": map[string]string{
+				"aspect_ratio": map[string]interface{}{
 					"type":        "string",
 					"description": "The aspect ratio of the image (e.g., '16:9', '1:1').",
 					"enum":        []string{"1:1", "16:9", "4:3", "3:2"},
