@@ -2,6 +2,8 @@
 
 A CLI tool for generating images using AI providers (currently supporting Nano Banana Pro).
 
+![demo](./docs/demo.gif)
+
 ## Prerequisites
 
 - [Go](https://go.dev/dl/) installed (version 1.22+ recommended)
