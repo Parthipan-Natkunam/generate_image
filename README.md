@@ -1,4 +1,6 @@
-# Image Generation Tool
+<p align="center">
+    <img src="./docs/banner.jpg" alt="img-gen tool banner image" height="150"/>
+</p>
 
 A CLI tool for generating images using AI providers (currently supporting Nano Banana Pro).
 
