@@ -4,6 +4,11 @@ A CLI tool for generating images using AI providers (currently supporting Nano B
 
 ![demo](./docs/demo.gif)
 
+> [!NOTE]
+> This tool also has a claude skill that can be installed and used on Claude Code
+
+![claude-skill](./docs/claude-skill-demo.gif)
+
 ## Prerequisites
 
 - [Go](https://go.dev/dl/) installed (version 1.22+ recommended)
