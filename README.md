@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="./docs/banner.jpg" alt="img-gen tool banner image"/>
+    <img src="./docs/banner-narrow.png" alt="img-gen tool banner image"/>
 </p>
 
 A CLI tool for generating images using AI providers (currently supporting Nano Banana Pro).
