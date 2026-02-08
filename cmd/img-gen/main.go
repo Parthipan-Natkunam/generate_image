@@ -22,7 +22,7 @@ func main() {
 	imageSizePtr := flag.String("image-size", "2K", "Size of the image")
 	jsonPtr := flag.Bool("json", false, "Output result in JSON format")
 	describePtr := flag.Bool("describe", false, "Output tool definition JSON")
-	outputDirPtr := flag.String("output-dir", ".", "Directory to save generated images")
+	outputDirPtr := flag.String("output-dir", "./generated-images", "Directory to save generated images")
 
 	flag.Parse()
 
@@ -44,6 +44,12 @@ func main() {
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		handleError("Failed to load configuration", err, *jsonPtr)
+	}
+
+	// Ensure output directory exists
+	err = os.MkdirAll(*outputDirPtr, 0755)
+	if err != nil {
+		handleError("Failed to create output directory", err, *jsonPtr)
 	}
 
 	// Initialize Provider (Defaulting to Nano Banana for now)

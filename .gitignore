@@ -3,4 +3,5 @@ img-gen
 .env
 .env.example
 images
+generated-images
 .claude
