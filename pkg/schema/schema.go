@@ -36,6 +36,45 @@ func GetToolDefinition() ToolDefinition {
 					"description": "The size of the image (e.g., '1K', '2K', '4K').",
 					"enum":        []string{"1K", "2K", "4K"},
 				},
+				"watermark_text": map[string]string{
+					"type":        "string",
+					"description": "Optional text to use as watermark on the generated image. Cannot be used with watermark_image.",
+				},
+				"watermark_image": map[string]string{
+					"type":        "string",
+					"description": "Optional path to an image file to use as watermark. Cannot be used with watermark_text.",
+				},
+				"watermark_position": map[string]interface{}{
+					"type":        "string",
+					"description": "Position of the watermark on the image. Default: 'bottom-right'.",
+					"enum":        []string{"top-left", "top-center", "top-right", "left-center", "center", "right-center", "bottom-left", "bottom-center", "bottom-right"},
+				},
+				"watermark_opacity": map[string]interface{}{
+					"type":        "number",
+					"description": "Opacity level of the watermark (0.0-1.0). Default: 0.7.",
+					"minimum":     0.0,
+					"maximum":     1.0,
+				},
+				"watermark_margin": map[string]interface{}{
+					"type":        "integer",
+					"description": "Margin from edge in pixels. Default: 20.",
+					"minimum":     0,
+				},
+				"watermark_text_size": map[string]interface{}{
+					"type":        "integer",
+					"description": "Font size for text watermark in pixels. Default: 24.",
+					"minimum":     1,
+				},
+				"watermark_text_color": map[string]string{
+					"type":        "string",
+					"description": "Hex color code for text watermark (e.g., '#FFFFFF'). Default: '#FFFFFF'.",
+				},
+				"watermark_scale": map[string]interface{}{
+					"type":        "number",
+					"description": "Scale factor for image watermark as a percentage of base image width (0.1-1.0). Default: 0.2.",
+					"minimum":     0.1,
+					"maximum":     1.0,
+				},
 			},
 			Required: []string{"prompt"},
 		},

@@ -14,6 +14,7 @@ import (
 	"github.com/Parthipan-Natkunam/generate_image/pkg/generator"
 	"github.com/Parthipan-Natkunam/generate_image/pkg/providers/nanobanana"
 	"github.com/Parthipan-Natkunam/generate_image/pkg/schema"
+	"github.com/Parthipan-Natkunam/generate_image/pkg/watermark"
 )
 
 func main() {
@@ -24,7 +25,23 @@ func main() {
 	describePtr := flag.Bool("describe", false, "Output tool definition JSON")
 	outputDirPtr := flag.String("output-dir", "./generated-images", "Directory to save generated images")
 
+	// Watermark flags
+	watermarkTextPtr := flag.String("watermark-text", "", "Text to use as watermark")
+	watermarkImagePtr := flag.String("watermark-image", "", "Path to image file to use as watermark")
+	watermarkPositionPtr := flag.String("watermark-position", "bottom-right", "Watermark position (top-left, top-center, top-right, left-center, center, right-center, bottom-left, bottom-center, bottom-right)")
+	watermarkOpacityPtr := flag.Float64("watermark-opacity", 0.7, "Watermark opacity (0.0-1.0)")
+	watermarkMarginPtr := flag.Int("watermark-margin", 20, "Watermark margin from edge in pixels")
+	watermarkTextSizePtr := flag.Int("watermark-text-size", 24, "Font size for text watermark")
+	watermarkTextColorPtr := flag.String("watermark-text-color", "#FFFFFF", "Text color in hex format (e.g., #FFFFFF)")
+	watermarkScalePtr := flag.Float64("watermark-scale", 0.2, "Scale factor for image watermark (0.1-1.0)")
+
 	flag.Parse()
+
+	// Validate watermark flags (mutual exclusivity)
+	if *watermarkTextPtr != "" && *watermarkImagePtr != "" {
+		handleError("Cannot use both --watermark-text and --watermark-image",
+			fmt.Errorf("flags are mutually exclusive"), *jsonPtr)
+	}
 
 	if *describePtr {
 		jsonSchema, err := schema.GetJSON()
@@ -70,6 +87,31 @@ func main() {
 		handleError("Generation failed", err, *jsonPtr)
 	}
 
+	// Apply watermark if requested
+	finalImageData := imageData
+	if *watermarkTextPtr != "" || *watermarkImagePtr != "" {
+		wmConfig := watermark.Config{
+			Text:      *watermarkTextPtr,
+			Image:     *watermarkImagePtr,
+			Position:  watermark.Position(*watermarkPositionPtr),
+			Margin:    *watermarkMarginPtr,
+			Opacity:   *watermarkOpacityPtr,
+			TextSize:  *watermarkTextSizePtr,
+			TextColor: *watermarkTextColorPtr,
+			Scale:     *watermarkScalePtr,
+		}
+
+		watermarkedData, err := watermark.Apply(imageData, wmConfig)
+		if err != nil {
+			handleError("Failed to apply watermark", err, *jsonPtr)
+		}
+		finalImageData = watermarkedData
+
+		if *jsonPtr == false {
+			fmt.Println("Watermark applied successfully")
+		}
+	}
+
 	ext := ".png"
 	if contentType == "image/jpeg" {
 		ext = ".jpg"
@@ -77,7 +119,7 @@ func main() {
 	filename := fmt.Sprintf("img_%d%s", time.Now().Unix(), ext)
 	outPath := filepath.Join(*outputDirPtr, filename)
 
-	err = os.WriteFile(outPath, imageData, 0644)
+	err = os.WriteFile(outPath, finalImageData, 0644)
 	if err != nil {
 		handleError("Failed to save image", err, *jsonPtr)
 	}
